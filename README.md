@@ -9,6 +9,7 @@ crash/hang reports); Android ROM issues occasionally.
 ```
 README.md                       # this file + issue index table
 new-issue.sh                    # scaffold a new issue from a template
+check_duplicates.py             # deterministic .ips duplicate/recurrence check
 templates/
   macos-issue.md                # macOS report template
   android-issue.md              # Android report template
@@ -26,18 +27,56 @@ android/
 
 ## Workflow
 
-1. Run `./new-issue.sh macos "<kebab-slug>"` (or `android`) — creates the
+1. For a macOS crash, run `./check_duplicates.py <new .ips>` **first** (see
+   "Duplicate / recurrence check" below) — exit 10/11 means record a
+   recurrence in the existing issue instead of scaffolding.
+2. Run `./new-issue.sh macos "<kebab-slug>"` (or `android`) — creates the
    directory, `report.md` from the template, and `evidence/`.
-2. Fill in the front matter (status, severity, component) and the sections:
+3. Fill in the front matter (status, severity, component) and the sections:
    summary, environment, observed debug messages, reproduction, analysis.
-3. Save raw evidence under `evidence/`. Keep the original filenames
+4. Save raw evidence under `evidence/`. Keep the original filenames
    (macOS `.ips`/dump names already carry dates and hostnames).
-4. Paste exact log excerpts with their timestamps in `report.md`, together
+5. Paste exact log excerpts with their timestamps in `report.md`, together
    with the `log show`/`log stream` command that produced them — without the
    command, an excerpt is impossible to reproduce or extend later.
-5. Add a row to the index table below.
-6. Commit. Keep report.md the source of truth; move resolved items only
+6. Add a row to the index table below.
+7. Commit. Keep report.md the source of truth; move resolved items only
    after recording the outcome.
+
+## Duplicate / recurrence check (deterministic)
+
+`./check_duplicates.py <new-report.ips>` decides by fixed rules whether a
+fresh macOS crash is already recorded here. Stdlib-only Python, no network,
+no AI: identical input always yields the identical verdict.
+
+Fingerprint compared per evidence file (raw fault addresses are never
+compared directly — ASLR re-randomizes them on every run):
+
+- app bundle `CFBundleIdentifier`
+- app binary **build UUID** — pins the exact build of the crashing binary
+- exception kind: type + signal + subtype (hex addresses normalized to
+  `0xADDR`) + address class `near-null` (< 0x100000) vs `wild`
+- top-3 `imageOffset`s of the app's own frames on the faulting thread, in
+  stack order — stable across runs within one build
+- faulting dispatch queue
+
+Same bundle + same build UUID + same kind + same top offsets + same queue
+⇒ RECURRENCE. Same kind but shifted offsets or a different build ⇒
+POSSIBLE (human review; a new build usually shifts frame offsets).
+
+| Exit | Verdict | Action |
+|------|---------|--------|
+| 0 | clean (or same app, different shape) | file a new issue normally |
+| 10 | RECURRENCE | record in the existing issue: sanitize the new `.ips` into its `evidence/`, append a row to its `## Recurrences` table — do **not** scaffold |
+| 11 | POSSIBLE | review manually first (if the build changed, re-symbolicate with `atos`); then T1-style update or a new issue |
+| 3 | unparsable input | check did not run — classify manually |
+| 2 | usage error | fix arguments |
+
+`--scan-all` cross-checks every committed `evidence/*.ips` pairwise (catches
+issues that are duplicates of each other); `--verbose` prints the extracted
+signatures. Feeding an already-committed evidence file back flags itself —
+that is the intended sanity check. Scope: macOS `.ips` with a JSON `threads`
+body (crash and hang reports); Android issues are compared manually.
 
 ## Naming and status vocabulary
 

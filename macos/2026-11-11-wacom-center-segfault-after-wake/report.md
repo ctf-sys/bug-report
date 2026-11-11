@@ -162,3 +162,14 @@ also contains `instructionByteStream` around PC for offline disassembly.)
   UUID, `deviceIdentifierForVendor`, signing team ID.
 - `User ID: 503` is a local POSIX uid; `Hardware Model Mac15,3` is a model
   identifier, not a serial number.
+
+## Recurrences
+
+One row per later occurrence confirmed by `./check_duplicates.py <new .ips>`
+(exit 10; README → "Duplicate / recurrence check"). Same fingerprint means
+the same issue — append a row here and commit another `.ips` under
+`evidence/`; **never** scaffold a new issue for it.
+
+| Date | Fingerprint | Incident ID | Evidence file | Note |
+|------|-------------|-------------|---------------|------|
+| 2026-11-11 (first) | `54736113e34746d3` | `4D383018-351F-4B0A-8450-9BA7CEDA1154` | `Wacom-Center-2026-11-11-091750.ips` | founding crash |

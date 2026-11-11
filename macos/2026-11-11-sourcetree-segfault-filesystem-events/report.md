@@ -168,3 +168,14 @@ frames are offsets.)
   crash reporter key, sleep/wake UUID, `deviceIdentifierForVendor`,
   signing team ID, BootROM/OS build strings.
 - `User ID: 503` is a local POSIX uid.
+
+## Recurrences
+
+One row per later occurrence confirmed by `./check_duplicates.py <new .ips>`
+(exit 10; README → "Duplicate / recurrence check"). Same fingerprint means
+the same issue — append a row here and commit another `.ips` under
+`evidence/`; **never** scaffold a new issue for it.
+
+| Date | Fingerprint | Incident ID | Evidence file | Note |
+|------|-------------|-------------|---------------|------|
+| 2026-11-11 (first) | `2f8a54313001dd30` | `A1F48A04-FC9C-4723-A906-5FB1503C1954` | `Sourcetree-2026-11-11-020336.ips` | founding crash |

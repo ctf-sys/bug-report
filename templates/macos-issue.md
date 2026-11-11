@@ -70,3 +70,13 @@ Distinguish observed facts from interpretation.
 
 - Where: <link>
 - Status:
+
+## Recurrences
+
+One row per later occurrence confirmed by `./check_duplicates.py <new .ips>`
+(exit 10; README → "Duplicate / recurrence check"). Same fingerprint means
+the same issue — append a row here and commit another `.ips` under
+`evidence/`; **never** scaffold a new issue for it.
+
+| Date | Fingerprint | Incident ID | Evidence file | Note |
+|------|-------------|-------------|---------------|------|
