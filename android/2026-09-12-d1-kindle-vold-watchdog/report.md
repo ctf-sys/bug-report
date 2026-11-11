@@ -1,3 +1,15 @@
+---
+date: 2026-09-12
+status: open
+severity: blocker
+platform: Android
+device:
+  model: Samsung Galaxy Note10 (SM-N970F)
+  codename: d1
+  rom: Evolution X 11.9 (Android 16)
+  android: "16"
+---
+
 ## Title
 
 [Android 16][d1] Amazon Kindle triggers StorageManagerService/vold watchdog and causes system reboot after login
