@@ -78,8 +78,26 @@ Full commands: see `templates/log-collection-macos.md`.
   `password` before pushing — and confirm matches are real data, not API
   symbols (e.g. `apex@com.android.*` is a package path, not an email).
 
+## Deletion / history notes
+
+- **2026-11-11 — privacy purge:** raw Android ANR dumps (2026-09-12,
+  ~1.8 MB, 2 files) deleted from the working tree **and all git history**
+  via `git filter-repo --invert-paths` + force push, after a full PII audit
+  of their contents (audit found no real personal data — removed as stale
+  bulk evidence; `report.md`/`collection.md` retain the analysis).
+  Old commit hashes from before this date are invalid; refer to content by
+  current paths only.
+- **2026-11-11 — commit identity:** `kubectf@gmail.com` removed from commit
+  metadata; all commits now use
+  `73512546+ctf-sys@users.noreply.github.com` (GitHub noreply form), and
+  repo-local `user.email` is set to the same so future commits stay clean.
+- GitHub may retain cached views of force-pushed content until their
+  Support purges it; any external clones/forks made earlier still hold the
+  old data. Treat the removal as best-effort at the platform level.
+
 ## Index
 
 | First seen | Platform | Issue | Affected | Status | Note |
 |------------|----------|-------|----------|--------|------|
-| 2026-09-12 | Android 16 (SM-N970F/d1, Evolution X 11.9) | [Kindle triggers StorageManagerService/vold watchdog → reboot](android/2026-09-12-d1-kindle-vold-watchdog/report.md) | `com.amazon.kindle` 8.156.0.100 | open | `system_server` watchdog; not a normal ANR |
+| 2026-09-12 | Android 16 (SM-N970F/d1, Evolution X 11.9) | [Kindle triggers StorageManagerService/vold watchdog → reboot](android/2026-09-12-d1-kindle-vold-watchdog/report.md) | `com.amazon.kindle` 8.156.0.100 | open | `system_server` watchdog; not a normal ANR; raw ANR dumps purged from history 2026-11-11 |
+| 2026-11-11 | macOS 27.2.1 (Mac15,3) | [Wacom Center SIGSEGV on main-thread polling timer ~4 s after wake](macos/2026-11-11-wacom-center-segfault-after-wake/report.md) | `com.wacom.WacomCenter` 6.4.14-1 (6.4.14f1) | open | `EXC_BAD_ACCESS @0x10` from `-[MainWindowDelegate pollingTimerCallback:]`; wake-correlated |
