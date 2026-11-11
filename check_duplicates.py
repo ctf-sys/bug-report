@@ -13,16 +13,23 @@ Fingerprint per evidence file (all fields from the .ips JSON body):
     order (stable across runs within one build; ASLR only shifts load bases)
   - dispatch queue of the faulting thread
 
-Raw fault addresses are NEVER compared directly (ASLR changes every run).
+First-party ad-hoc CLIs (no bundle id, binary under /Users/...): the
+executable name (procName/app_name) plays the app-identity role the bundle
+id plays for apps, and the report's own slice_uuid pins the build; app-image
+offsets are then extracted exactly as above. Raw fault addresses are NEVER
+compared directly (ASLR changes every run).
 
 Pairwise rules (evidence from different issue directories):
   bundle differs                        -> SKIP  (irrelevant pair)
+  first-party pair, executable differs  -> SKIP  (different tool entirely)
   same bundle, different exception kind -> SKIP  (different bug in same app)
   same build + kind + queue + top-3 app-frame offsets all match
                                         -> T1 RECURRENCE
   same build + kind, offsets differ     -> T2 POSSIBLE (review)
   different build + same kind + queue   -> T2 POSSIBLE (offsets may shift)
   anything else same-app                -> INFO (same app, different shape)
+  (for first-party pairs "same app" = same executable name; "different
+  build" = same tool after a rebuild, which shifts offsets like any app)
 
 Exit codes: 0 clean | 10 at least one T1 | 11 only T2 |
             3 unparsable input | 2 usage
@@ -46,6 +53,7 @@ from pathlib import Path
 PLATFORM_DIRS = ("macos", "android")
 NEAR_NULL_LIMIT = 0x100000   # below 1 MiB: classic null/near-null dereference
 PREFIX_FRAMES = 3            # app-side frames that pin the code path
+ZERO_UUID = "00000000-0000-0000-0000-000000000000"   # "???" placeholder image
 
 T_SKIP, T_INFO, T2, T1 = 0, 1, 2, 3   # ordered by match strength
 LABEL = {T_SKIP: "SKIP", T_INFO: "INFO", T2: "POSSIBLE", T1: "RECURRENCE"}
@@ -102,12 +110,27 @@ def _addr_class(far) -> str:
     return "near-null" if far < NEAR_NULL_LIMIT else "wild"
 
 
-def _app_image_index(images, bundle):
-    for i, img in enumerate(images):
-        if bundle and img.get("CFBundleIdentifier") == bundle:
-            return i
+def _app_image_index(images, bundle, slice_uuid=""):
+    """Index of the app's own image in usedImages, or None.
+
+    Priority: bundle id match -> /Applications/ image -> image whose uuid
+    equals the report's slice_uuid (first-party) -> /Users/ image with a
+    real uuid (first-party, meta line missing).
+    """
+    if bundle:
+        for i, img in enumerate(images):
+            if img.get("CFBundleIdentifier") == bundle:
+                return i
     for i, img in enumerate(images):
         if str(img.get("path", "")).startswith("/Applications/") and img.get("uuid"):
+            return i
+    if slice_uuid and slice_uuid != ZERO_UUID:
+        for i, img in enumerate(images):
+            if img.get("uuid") == slice_uuid:
+                return i
+    for i, img in enumerate(images):
+        if str(img.get("path", "")).startswith("/Users/") \
+                and img.get("uuid") not in ("", None, ZERO_UUID):
             return i
     return None
 
@@ -136,7 +159,7 @@ def sig_from(body, meta, source=""):
         _norm_subtype(exc.get("subtype") or ""),
         _addr_class(far),
     )
-    app_idx = _app_image_index(images, bundle)
+    app_idx = _app_image_index(images, bundle, meta.get("slice_uuid") or "")
     app_uuid = (images[app_idx].get("uuid") or "") if app_idx is not None else ""
     offsets = [
         f["imageOffset"]
@@ -149,6 +172,7 @@ def sig_from(body, meta, source=""):
         "version": bi.get("CFBundleShortVersionString") or "",
         "build": bi.get("CFBundleVersion") or "",
         "app_uuid": app_uuid,
+        "proc_name": body.get("procName") or meta.get("app_name") or "",
         "exc_type": kind_vals[0],
         "exc_signal": kind_vals[1],
         "exc_subtype_norm": kind_vals[2],
@@ -161,6 +185,11 @@ def sig_from(body, meta, source=""):
     core = {k: sig[k] for k in ("bundle", "app_uuid", "exc_type", "exc_signal",
                                 "exc_subtype_norm", "addr_class", "queue")}
     core["offsets3"] = offsets[:PREFIX_FRAMES]
+    if not bundle and sig["proc_name"]:
+        # first-party CLI: the executable name is the app identity the
+        # (absent) bundle id would have provided; changes the fp only for
+        # first-party files, which previously all collapsed to one hash.
+        core["proc_name"] = sig["proc_name"]
     sig["fp"] = hashlib.sha256(
         json.dumps(core, sort_keys=True, separators=(",", ":")).encode()
     ).hexdigest()[:16]
@@ -188,6 +217,13 @@ def compare(a, b):
     """Apply the pairwise rule table. Returns (tier, reason)."""
     if a["bundle"] != b["bundle"]:
         return T_SKIP, "different app bundle"
+    if not a["bundle"] and not b["bundle"]:
+        # First-party ad-hoc CLI pair: the executable name is the app
+        # identity. Different names -> different tools entirely, nothing
+        # a recurrence row in either issue could represent.
+        na, nb = a["proc_name"], b["proc_name"]
+        if na and nb and na != nb:
+            return T_SKIP, f"different first-party executable ({na} vs {nb})"
     if kind(a) != kind(b):
         return T_SKIP, "same app, different exception kind"
     same_uuid = bool(a["app_uuid"]) and a["app_uuid"] == b["app_uuid"]
@@ -235,7 +271,8 @@ def new_sig(path) -> dict:
 
 
 def _one_line(sig):
-    return (f"{sig['bundle']} {sig['version']} ({sig['build']}) "
+    app = sig["bundle"] or sig["proc_name"] or "?"
+    return (f"{app} {sig['version']} ({sig['build']}) "
             f"queue={sig['queue']!r} offsets={sig['offsets'][:PREFIX_FRAMES]}")
 
 

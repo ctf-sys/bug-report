@@ -64,6 +64,18 @@ Same bundle + same build UUID + same kind + same top offsets + same queue
 ⇒ RECURRENCE. Same kind but shifted offsets or a different build ⇒
 POSSIBLE (human review; a new build usually shifts frame offsets).
 
+First-party ad-hoc CLIs (no bundle id, binary under `/Users/…`): the
+executable name (`procName`) provides the app identity the bundle id
+would provide, the report's own `slice_uuid` pins the build, and app-frame
+offsets are extracted the same way. Different executable names ⇒ clean
+(different tool entirely); same name but a different `slice_uuid` ⇒
+POSSIBLE, because a rebuild shifts frame offsets like any app.
+(Historical note: before 2026-11-11 these reports had no resolvable app
+image, so the fingerprint collapsed to one shared hash `e3fdfedbc3bc3369`
+and every first-party crash exited 11; fingerprints recorded in the
+2026-11-11 pdfdump/cropzoom/inktest7/inktest8 reports are those
+historical values.)
+
 | Exit | Verdict | Action |
 |------|---------|--------|
 | 0 | clean (or same app, different shape) | file a new issue normally |
