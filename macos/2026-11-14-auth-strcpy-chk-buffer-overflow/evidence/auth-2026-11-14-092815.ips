@@ -1,0 +1,143 @@
+{"app_name":"auth","timestamp":"2026-11-14 09:28:15.00 +0700","app_version":"","sroute_id":3,"slice_uuid":"aa453a47-c179-4c5a-862d-fa81b0f6c263","build_version":"","platform":1,"share_with_app_devs":0,"is_first_party":1,"bug_type":"309","os_version":"macOS 27.2.1 (26B131)","roots_installed":0,"incident_id":"DD7462A2-4E0F-49D5-94B9-4A935D21183F","name":"auth"}
+{
+  "uptime" : 56000,
+  "procRole" : "Unspecified",
+  "version" : 2,
+  "userID" : 503,
+  "deployVersion" : 210,
+  "modelCode" : "Mac15,3",
+  "coalitionID" : 1720,
+  "osVersion" : {
+    "train" : "macOS 27.2.1",
+    "build" : "26B131",
+    "releaseType" : "User"
+  },
+  "captureTime" : "2026-11-14 09:28:15.0985 +0700",
+  "codeSigningMonitor" : 2,
+  "incident" : "DD7462A2-4E0F-49D5-94B9-4A935D21183F",
+  "pid" : 53930,
+  "translated" : false,
+  "cpuType" : "ARM-64",
+  "procLaunch" : "2026-11-14 09:28:14.9498 +0700",
+  "procStartAbsTime" : 1353943499374,
+  "procExitAbsTime" : 1353943580672,
+  "procName" : "auth",
+  "procPath" : "\/private\/tmp\/*\/auth",
+  "parentProc" : "Exited process",
+  "parentPid" : 53923,
+  "coalitionName" : "com.googlecode.iterm2",
+  "crashReporterKey" : "23BBEC61-827E-AF1E-1B9E-969DA989C951",
+  "chargingStatus" : {"chargeMode":"chargingWired","externalSourceConnected":true},
+  "developerMode" : 1,
+  "bootProgressRegister" : "0x3f000000",
+  "responsiblePid" : 1683,
+  "responsibleProc" : "iTerm2",
+  "codeSigningID" : "auth",
+  "codeSigningTeamID" : "",
+  "codeSigningFlags" : 570556929,
+  "codeSigningValidationCategory" : 10,
+  "codeSigningTrustLevel" : 4294967295,
+  "codeSigningAuxiliaryInfo" : 0,
+  "instructionByteStream" : {"beforePC":"KAAA0AhxHZFJRIBSDOP\/l38jA9X9e7+p\/QMAkSAAANAAHB+RNvn\/lw==","atPC":"IAAg1H8jA9X9e7+p\/QMAkSAAANAAgB+RL\/n\/lyAAINR\/IwPV9le9qQ=="},
+  "bootSessionUUID" : "223898A4-BD49-4A8F-914C-61F5B66E3C49",
+  "wakeTime" : 2134,
+  "sleepWakeUUID" : "3E51FCE3-53D5-48EB-B1E0-B557C010619F",
+  "sip" : "enabled",
+  "sroute_id" : 3,
+  "exception" : {"codes":"0x0000000000000001, 0x0000000198c34c48","rawCodes":[1,6857903176],"type":"EXC_BREAKPOINT","signal":"SIGTRAP"},
+  "termination" : {"flags":0,"code":5,"namespace":"SIGNAL","indicator":"Trace\/BPT trap: 5","byProc":"exc handler","byPid":53930},
+  "os_fault" : {"process":"auth"},
+  "asi" : {"libsystem_c.dylib":["detected buffer overflow"]},
+  "extMods" : {"caller":{"thread_create":0,"thread_set_state":0,"task_for_pid":0},"system":{"thread_create":0,"thread_set_state":0,"task_for_pid":0},"targeted":{"thread_create":0,"thread_set_state":0,"task_for_pid":0},"warnings":0},
+  "faultingThread" : 0,
+  "threads" : [{"triggered":true,"id":1097136,"threadState":{"x":[{"value":6857926599,"symbolLocation":3878,"symbol":"hexlist"},{"value":0},{"value":0},{"value":6162851201},{"value":1},{"value":16},{"value":0},{"value":0},{"value":8647090176,"symbolLocation":32,"symbol":"link_ntoa.obuf"},{"value":8685817072,"symbolLocation":2864,"symbol":"lsl::sPoolBytes"},{"value":4304027648},{"value":1088},{"value":128},{"value":4304028608},{"value":0},{"value":6931906816,"symbolLocation":0,"symbol":"$_0::operator()() const::'lambda'(unsigned long, std::__type_descriptor_t, std::nothrow_t const&)::__invoke(unsigned long, std::__type_descriptor_t, std::nothrow_t const&)"},{"value":6940958048,"symbolLocation":0,"symbol":"_platform_memmove"},{"value":8496730600},{"value":0},{"value":6162851180},{"value":6162853767},{"value":16},{"value":6162851568},{"value":8688806896,"symbolLocation":0,"symbol":"vm_page_mask"},{"value":1},{"value":68719460620},{"value":6162851752},{"value":8688806880,"symbolLocation":0,"symbol":"mach_task_self_"},{"value":4305174528}],"flavor":"ARM_THREAD_STATE64","lr":{"value":6857903176},"cpsr":{"value":2147487744},"fp":{"value":6162851088},"sp":{"value":6162851088},"esr":{"value":4060086273,"description":"(Breakpoint) brk 1"},"pc":{"value":6857903176,"matchesCrashFrame":1},"far":{"value":0}},"queue":"com.apple.main-thread","frames":[{"imageOffset":506952,"symbol":"__chk_fail_overflow","symbolLocation":24,"imageIndex":1},{"imageOffset":57780,"symbol":"__strcpy_chk","symbolLocation":108,"imageIndex":1},{"imageOffset":1172,"symbol":"main","symbolLocation":52,"imageIndex":0},{"imageOffset":204156,"symbol":"start","symbolLocation":6652,"imageIndex":2}]}],
+  "usedImages" : [
+  {
+    "source" : "P",
+    "arch" : "arm64",
+    "base" : 4304027648,
+    "size" : 16384,
+    "uuid" : "aa453a47-c179-4c5a-862d-fa81b0f6c263",
+    "path" : "\/private\/tmp\/*\/auth",
+    "name" : "auth"
+  },
+  {
+    "source" : "P",
+    "arch" : "arm64e",
+    "base" : 6857396224,
+    "size" : 535764,
+    "uuid" : "4bf47ebb-4cd0-3f4a-995a-717b8550cb12",
+    "path" : "\/usr\/lib\/system\/libsystem_c.dylib",
+    "name" : "libsystem_c.dylib"
+  },
+  {
+    "source" : "P",
+    "arch" : "arm64e",
+    "base" : 6856224768,
+    "size" : 785540,
+    "uuid" : "d8104ed6-185e-3a2f-ad71-b91eddbe2598",
+    "path" : "\/usr\/lib\/dyld",
+    "name" : "dyld"
+  },
+  {
+    "size" : 0,
+    "source" : "A",
+    "base" : 0,
+    "uuid" : "00000000-0000-0000-0000-000000000000"
+  },
+  {
+    "source" : "P",
+    "arch" : "arm64e",
+    "base" : 6931820544,
+    "size" : 106240,
+    "uuid" : "e7646a85-5f12-349c-b17f-5df0797f24a0",
+    "path" : "\/usr\/lib\/libc++abi.dylib",
+    "name" : "libc++abi.dylib"
+  },
+  {
+    "source" : "P",
+    "arch" : "arm64e",
+    "base" : 6940942336,
+    "size" : 38132,
+    "uuid" : "fdf30fd1-5e97-3348-bee7-ba386574a75f",
+    "path" : "\/usr\/lib\/system\/libsystem_platform.dylib",
+    "name" : "libsystem_platform.dylib"
+  }
+],
+  "sharedCache" : {
+  "base" : 6851477504,
+  "size" : 7712440320,
+  "uuid" : "c208f2eb-29b0-3d9e-ba56-45fd90e37b16"
+},
+  "vmSummary" : "ReadOnly portion of Libraries: Total=1.6G resident=0K(0%) swapped_out_or_unallocated=1.6G(100%)\nWritable regions: Total=85.6M written=272K(0%) resident=272K(0%) swapped_out=0K(0%) unallocated=85.3M(100%)\n\n                                VIRTUAL   REGION \nREGION TYPE                        SIZE    COUNT (non-coalesced) \n===========                     =======  ======= \nDeferred Reclaim                  64.0M        1 \nGuard                            385.0G        1 \nMalloc                            13.3M        9 \nMalloc Guard Page                 3920K        4 \nOS Alloc Once                       32K        1 \nStack                             8176K        1 \nStack Guard                       56.0M        1 \n__AUTH                              35K       11 \n__AUTH_CONST                       221K       40 \n__DATA                             182K       31 \n__DATA_CONST                       109K       39 \n__DATA_DIRTY                       141K       71 \n__LINKEDIT                         1.6G        2 \n__OBJC_RO                        118.5M        1 \n__OBJC_RW                         2740K        1 \n__TEXT                            6416K       83 \n__TPRO_CONST                       132K        4 \npage table in kernel               272K        1 \nshared memory                       32K        1 \n===========                     =======  ======= \nTOTAL                            386.9G      303 \n",
+  "legacyInfo" : {
+  "threadTriggered" : {
+    "queue" : "com.apple.main-thread"
+  }
+},
+  "logWritingSignature" : "6d44fcaa6b69e9a64755acf32f45dfa0a17ffb2c",
+  "roots_installed" : 0,
+  "bug_type" : "309",
+  "trmStatus" : 1,
+  "trialInfo" : {
+  "rollouts" : [
+    {
+      "rolloutId" : "6813dc6e1e50e5344eb573e9",
+      "factorPackIds" : [
+
+      ],
+      "deploymentId" : 240000021
+    },
+    {
+      "rolloutId" : "67648e5334a82511f4acf879",
+      "factorPackIds" : [
+
+      ],
+      "deploymentId" : 240000008
+    }
+  ],
+  "experiments" : [
+
+  ]
+}
+}
