@@ -64,7 +64,7 @@ first non-Objective-C program in the repo (imports: `___strcpy_chk`,
   - Successor build: `auth2`, UUID `1f2e8140-8a32-4da8-ab93-67aef5a939b1`
     (written 09:28:40, 26 s after the crash; not executed during filing)
   - Install source: compiled locally in a course scratchpad
-    (`/private/tmp/claude-503/…/scratchpad/auth.c`, arm64, ad-hoc signed —
+    (`/private/tmp/…/scratchpad/auth.c`, arm64, ad-hoc signed —
     `codeSigningID: auth`, no team id)
 - Reproducibility: 1/1 observed run (launch 09:28:14.9498 → crash
   09:28:15.0985); source + register state confirm the mechanism, so the
@@ -211,8 +211,7 @@ as the exercise expects only under the course's sanctioned conditions;
   occurrences of serial tokens, `/Users/…` paths, scratchpad/course
   paths, or email addresses; the copy is byte-identical to the original
   (no redaction required). `procPath` arrives pre-redacted by Apple as
-  `/private/tmp/*/auth`.
-- The report deliberately does **not** reproduce the course flag string
+  `/private/tmp/*/auth`.- The report deliberately does **not** reproduce the course flag string
   found in the source (public repo); the quoted code is limited to the
   vulnerable lines, and the source file itself is not committed.
 - Kept deliberately (pseudonymous): incident id `DD7462A2-…`, slice/build
